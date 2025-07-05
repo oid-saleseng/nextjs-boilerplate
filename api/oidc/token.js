@@ -1,19 +1,13 @@
 import jwt from "jsonwebtoken";
 import { createPrivateKey } from "crypto";
 
-const privateKeyPEM = process.env.PRIVATE_KEY;
+const base64Key = process.env.PRIVATE_KEY_BASE64;
+if (!base64Key) throw new Error('Missing PRIVATE_KEY_BASE64 env var');
 
-if (!privateKeyPEM) {
-  throw new Error('Missing PRIVATE_KEY environment variable');
-}
-
-// Replace escaped \n with real newlines if needed
-const privateKeyFormatted = privateKeyPEM.includes('\\n')
-  ? privateKeyPEM.replace(/\\n/g, '\n')
-  : privateKeyPEM;
+const privateKeyPEM = Buffer.from(base64Key, 'base64').toString('utf-8');
 
 const privateKey = createPrivateKey({
-  key: privateKeyFormatted,
+  key: privateKeyPEM,
   format: 'pem',
   type: 'pkcs8',
 });
