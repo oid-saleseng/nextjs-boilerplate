@@ -1,5 +1,7 @@
-import fetch from 'node-fetch'; // Add to package.json if needed
+// ❌ remove this
+// import fetch from 'node-fetch'; 
 
+// ✅ use built-in fetch (Node.js 18+)
 export default async function handler(req, res) {
   if (req.method === "GET") {
     const { client_id, redirect_uri, state, scope, response_type } = req.query;
@@ -36,7 +38,7 @@ export default async function handler(req, res) {
 
     const { email, password, redirect_uri, state } = body;
 
-    // 🔐 Validate credentials against your API
+    // 🔐 Use native fetch instead
     const response = await fetch("https://yourapi.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,12 +49,9 @@ export default async function handler(req, res) {
       return res.status(401).send("Invalid credentials");
     }
 
-    const user = await response.json(); // expect `{ id, name, email }`
+    const user = await response.json();
 
-    // Normally you'd create a session or store this in a DB
-    const code = "mock_auth_code"; // Store `code -> user` mapping somewhere
-
-    // Redirect to client's redirect_uri with code
+    const code = "mock_auth_code";
     const redirect = `${redirect_uri}?code=${code}&state=${state}`;
     return res.redirect(redirect);
   }
