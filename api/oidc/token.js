@@ -7,6 +7,7 @@ if (!privateKeyPEM) {
   throw new Error('Missing PRIVATE_KEY environment variable');
 }
 
+// Replace escaped \n with real newlines if needed
 const privateKeyFormatted = privateKeyPEM.includes('\\n')
   ? privateKeyPEM.replace(/\\n/g, '\n')
   : privateKeyPEM;
@@ -17,7 +18,6 @@ const privateKey = createPrivateKey({
   type: 'pkcs8',
 });
 
-
 export default async function handler(req, res) {
   const { grant_type, code, redirect_uri, client_id } = req.body || {};
 
@@ -26,6 +26,7 @@ export default async function handler(req, res) {
   }
 
   const now = Math.floor(Date.now() / 1000);
+
   const id_token = jwt.sign(
     {
       iss: process.env.BASE_URL,
