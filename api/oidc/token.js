@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
-import { privateKey } from "./keys";
+import { createPrivateKey } from "crypto";
 
 export default async function handler(req, res) {
   const { grant_type, code, redirect_uri, client_id } = req.body || {};
 
-
-const privateKey = `
+  const privateKeyPem = `
 -----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEApkDgMQ2oMeKAwzXmrhHKFvCJ1W7KXG+OqIAH9U57M6r7aEVH
 uH7Z9bQG+NMFUglTw2ImEVWTf5F3CxnLJMQ7lDAeoL2HhZDbjVrEjUMgcBhMuBHv
@@ -35,6 +34,9 @@ lm3EsI20V4yCvC+Y9EHuUMtR9fzL3yA/N6WtnVrsSCtDOVp++bRVoMI8=
 -----END RSA PRIVATE KEY-----
 `.trim();
 
+  // Convert PEM string to a KeyObject
+  const keyObject = createPrivateKey({ key: privateKeyPem, format: "pem" });
+
   if (grant_type !== "authorization_code" || code !== "mock_auth_code") {
     return res.status(400).json({ error: "invalid_grant" });
   }
@@ -50,7 +52,7 @@ lm3EsI20V4yCvC+Y9EHuUMtR9fzL3yA/N6WtnVrsSCtDOVp++bRVoMI8=
       name: "Test User",
       email: "user@example.com",
     },
-    privateKey,
+    keyObject,
     { algorithm: "RS256" }
   );
 
