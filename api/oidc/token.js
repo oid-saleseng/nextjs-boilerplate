@@ -42,8 +42,7 @@ v+vBzmx7cUIrgOQUyr9GGl1VHlRBsCqa5kaBkfIAXR8=
 
 const privateKey = createPrivateKey({
   key: privateKeyPEM,
-  format: 'pem',
-  type: 'pkcs8',
+  format: 'pem'
 });
 
 
