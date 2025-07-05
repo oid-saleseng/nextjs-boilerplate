@@ -38,7 +38,6 @@ DmFx+NZYd7OpvLPdjx9TCJxiVPo6bLkVyIjfUq09VWn9veHTpYX3uQv8Yyq4JzQZ
 XsD+w3fT4fHd7vL8HU1xB/k+NjfN0rBqkRvkh1cZP42K9NgriRwH8VGd4vs3cygl
 v+vBzmx7cUIrgOQUyr9GGl1VHlRBsCqa5kaBkfIAXR8=
 -----END PRIVATE KEY-----
-
 `.trim();
 
 const privateKey = createPrivateKey({
