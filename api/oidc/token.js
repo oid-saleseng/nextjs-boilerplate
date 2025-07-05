@@ -43,8 +43,9 @@ v+vBzmx7cUIrgOQUyr9GGl1VHlRBsCqa5kaBkfIAXR8=
 const privateKey = createPrivateKey({
   key: privateKeyPEM,
   format: 'pem',
-  type: 'pkcs1', // since your key is PKCS#1 format (RSA PRIVATE KEY)
+  type: 'pkcs8',
 });
+
 
 export default async function handler(req, res) {
   const { grant_type, code, redirect_uri, client_id } = req.body || {};
