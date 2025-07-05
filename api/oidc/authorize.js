@@ -5,16 +5,21 @@ export default async function handler(req, res) {
     return res.status(400).send("Missing required parameters");
   }
 
-  // Define allowed client IDs (whitelist)
-  const allowedClientIds = [
-    "client123",
-    "myclient",
-    "exampleClientId",
-    // add more allowed client IDs here
-  ];
+  // Whitelist of allowed redirect URIs per client_id
+  const clientRedirectWhitelist = {
+    client123: ["https://example.com/callback", "https://example.com/alt"],
+    myclient: ["https://myapp.com/auth/callback"],
+    testclient: ["http://localhost:3000/callback"],
+  };
 
-  if (!allowedClientIds.includes(client_id)) {
+  const allowedRedirects = clientRedirectWhitelist[client_id];
+
+  if (!allowedRedirects) {
     return res.status(400).send("Invalid client_id");
+  }
+
+  if (!allowedRedirects.includes(redirect_uri)) {
+    return res.status(400).send("Invalid redirect_uri for client_id");
   }
 
   // Simulate session (in real world use cookies)
