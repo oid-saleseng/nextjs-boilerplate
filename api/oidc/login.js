@@ -27,34 +27,32 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const body = await new Promise((resolve, reject) => {
-      let data = "";
-      req.on("data", chunk => data += chunk);
-      req.on("end", () => {
-        const params = new URLSearchParams(data);
-        resolve(Object.fromEntries(params));
-      });
+  const body = await new Promise((resolve, reject) => {
+    let data = "";
+    req.on("data", chunk => data += chunk);
+    req.on("end", () => {
+      const params = new URLSearchParams(data);
+      resolve(Object.fromEntries(params));
     });
+  });
 
-    const { email, password, redirect_uri, state } = body;
+  const { email, password, redirect_uri, state } = body;
 
-    // 🔐 Use native fetch instead
-    const response = await fetch("https://yourapi.com/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  // Hardcoded test credentials
+  const TEST_EMAIL = "testuser@example.com";
+  const TEST_PASSWORD = "testpassword";
 
-    if (!response.ok) {
-      return res.status(401).send("Invalid credentials");
-    }
-
-    const user = await response.json();
-
-    const code = "mock_auth_code";
-    const redirect = `${redirect_uri}?code=${code}&state=${state}`;
-    return res.redirect(redirect);
+  if (email !== TEST_EMAIL || password !== TEST_PASSWORD) {
+    return res.status(401).send("Invalid credentials");
   }
+
+  // Mock user object for testing
+  const user = { email: TEST_EMAIL };
+
+  const code = "mock_auth_code";
+  const redirect = `${redirect_uri}?code=${code}&state=${state}`;
+  return res.redirect(redirect);
+}
 
   res.status(405).send("Method Not Allowed");
 }
