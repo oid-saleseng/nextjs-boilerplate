@@ -5,6 +5,18 @@ export default async function handler(req, res) {
     return res.status(400).send("Missing required parameters");
   }
 
+  // Define allowed client IDs (whitelist)
+  const allowedClientIds = [
+    "client123",
+    "myclient",
+    "exampleClientId",
+    // add more allowed client IDs here
+  ];
+
+  if (!allowedClientIds.includes(client_id)) {
+    return res.status(400).send("Invalid client_id");
+  }
+
   // Simulate session (in real world use cookies)
   const isAuthenticated = false;
 
