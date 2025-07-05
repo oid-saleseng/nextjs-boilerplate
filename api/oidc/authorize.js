@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   // Whitelist of allowed redirect URIs per client_id
   const clientRedirectWhitelist = {
-    client123: ["https://example.com/callback", "https://example.com/alt"],
+    client123: ["https://ciam-se.onelogin.com/access/idp", "https://example.com/alt"],
     myclient: ["https://myapp.com/auth/callback"],
     testclient: ["http://localhost:3000/callback"],
   };
