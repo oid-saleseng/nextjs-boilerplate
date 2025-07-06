@@ -26,6 +26,7 @@ export default async function handler(req, res) {
       iss: process.env.BASE_URL,
       sub: "1234",
       aud: client_id,
+      nonce: req.body.nonce,
       exp: now + 3600,
       iat: now,
       name: "Test User",
