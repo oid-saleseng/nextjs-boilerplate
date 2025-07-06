@@ -26,7 +26,6 @@ export default async function handler(request, response) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Custom-Allowed-Origin-Header-1': request.body.host || '',
         'Authorization': `bearer ${tokenData.access_token}`
       },
       body: JSON.stringify({
