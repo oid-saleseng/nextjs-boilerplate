@@ -1,6 +1,3 @@
-// Simple in-memory store for nonce tied to auth codes
-const nonceStore = {};
-
 export default async function handler(req, res) {
   if (req.method === "GET") {
     const { client_id, redirect_uri, state, scope, response_type, nonce } = req.query;
@@ -45,18 +42,16 @@ export default async function handler(req, res) {
       return res.status(401).send("Invalid credentials");
     }
 
-    // Generate your auth code here; for test just a fixed one
-    const code = "mock_auth_code";
+    // Create a code payload with the nonce embedded
+    const codePayload = { nonce };
 
-    // Save nonce against the code for later validation in token endpoint
-    nonceStore[code] = nonce;
+    // Encode payload as base64 JSON string
+    const code = Buffer.from(JSON.stringify(codePayload)).toString('base64');
 
-    const redirect = `${redirect_uri}?code=${code}&state=${state}`;
+    // Redirect with the encoded code and state
+    const redirect = `${redirect_uri}?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`;
     return res.redirect(redirect);
   }
 
   res.status(405).send("Method Not Allowed");
 }
-
-// Export nonceStore for use in token handler
-export { nonceStore };
