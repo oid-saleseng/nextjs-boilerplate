@@ -13,13 +13,13 @@ const privateKey = createPrivateKey({
 });
 
 export default async function handler(req, res) {
-  const { grant_type, code, redirect_uri, client_id, nonce: nonceFromClient } = req.body || {};
+  const { grant_type, code, redirect_uri, client_id } = req.body || {};
 
   if (grant_type !== "authorization_code") {
     return res.status(400).json({ error: "invalid_grant" });
   }
-  if (!code || !nonceFromClient) {
-    return res.status(400).json({ error: "invalid_request", error_description: "Missing code or nonce" });
+  if (!code) {
+    return res.status(400).json({ error: "invalid_request", error_description: "Missing code" });
   }
 
   let codePayload;
@@ -34,9 +34,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "invalid_nonce", error_description: "Nonce missing in code" });
   }
 
-  if (codePayload.nonce !== nonceFromClient) {
-    return res.status(400).json({ error: "invalid_nonce", error_description: "Nonce mismatch" });
-  }
+  const nonce = codePayload.nonce;
 
   const now = Math.floor(Date.now() / 1000);
 
@@ -45,7 +43,7 @@ export default async function handler(req, res) {
       iss: process.env.BASE_URL,
       sub: "1234",
       aud: client_id,
-      nonce: nonceFromClient,
+      nonce,
       exp: now + 3600,
       iat: now,
       name: "Test User",
