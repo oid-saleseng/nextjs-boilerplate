@@ -9,8 +9,17 @@ export default function Home() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: handle login submit, e.g. call your API
-    alert(`Logging in with email: ${email}`);
+
+    // Hardcoded credentials
+    const hardcodedEmail = "user@example.com";
+    const hardcodedPassword = "password123";
+
+    if (email === hardcodedEmail && password === hardcodedPassword) {
+      alert("Login successful!");
+      // You can add navigation or further logic here
+    } else {
+      alert("Invalid username or password");
+    }
   };
 
   return (
