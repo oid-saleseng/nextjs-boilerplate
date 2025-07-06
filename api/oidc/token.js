@@ -30,24 +30,24 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "invalid_grant", error_description: "Malformed code" });
   }
 
-  if (!codePayload.nonce) {
-    return res.status(400).json({ error: "invalid_nonce", error_description: "Nonce missing in code" });
-  }
+  const { nonce, email, sub, name } = codePayload;
 
-  const nonce = codePayload.nonce;
+  if (!nonce || !email || !sub) {
+    return res.status(400).json({ error: "invalid_request", error_description: "Missing user info in code" });
+  }
 
   const now = Math.floor(Date.now() / 1000);
 
   const id_token = jwt.sign(
     {
       iss: process.env.BASE_URL,
-      sub: "1234",
+      sub,           // user ID
       aud: client_id,
       nonce,
       exp: now + 3600,
       iat: now,
-      name: "Test User",
-      email: "user@example.com",
+      name: name || email,
+      email,
     },
     privateKey,
     { algorithm: "RS256" }
