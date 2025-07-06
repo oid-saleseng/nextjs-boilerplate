@@ -85,39 +85,46 @@ export default function LoginForm() {
           className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         />
 
-        <button
-          type="submit"
-          className="mt-2 bg-blue-600 text-white rounded py-2 font-semibold hover:bg-blue-700 transition"
-        >
-          Log In
-        </button>
+        {/* Main Login Button */}
+<button
+  type="submit"
+  className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
+>
+  Login
+</button>
 
-        <button
-        type="button"
-        className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 mt-2 hover:bg-gray-100 transition-colors"
-        onClick={() => alert('Passkey login not implemented yet')}
-        >
-        Login with Passkey
-        </button>
+{/* Login with Passkey - minimal spacing */}
+<button
+  type="button"
+  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 mt-1 hover:bg-gray-100 transition-colors"
+  onClick={() => alert('Passkey login not implemented yet')}
+>
+  Login with Passkey
+</button>
+
+{/* Divider text */}
+<div className="text-center text-sm text-gray-500 mt-6 mb-2">
+  Other Login Options
+</div>
+
+{/* Apple Button */}
+<button
+  type="button"
+  className="w-full bg-black text-white rounded-md px-4 py-2 mb-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+>
+   Continue with Apple
+</button>
+
+{/* Google Button */}
+<button
+  type="button"
+  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+>
+  <img src="/google-icon.svg" alt="Google" className="w-5 h-5 mr-2" />
+  Continue with Google
+</button>
 
 
-        {/* Social login buttons */}
-        <div className="flex flex-col gap-2 mt-4">
-          <button
-            type="button"
-            className="flex items-center justify-center gap-2 border border-gray-300 rounded py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-          >
-            <Image src="/apple.svg" alt="Apple" width={20} height={20} />
-            Continue with Apple
-          </button>
-
-          <button
-            type="button"
-            className="flex items-center justify-center gap-2 border border-gray-300 rounded py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-          >
-            <Image src="/google.svg" alt="Google" width={20} height={20} />
-            Continue with Google
-          </button>
         </div>
 
         {/* Register link */}
