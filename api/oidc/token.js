@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { createPrivateKey } from "crypto";
-import { nonceStore } from "./login.js"; // adjust the path to your login handler file
 
 const base64Key = process.env.PRIVATE_KEY_BASE64;
 if (!base64Key) throw new Error('Missing PRIVATE_KEY_BASE64 env var');
@@ -14,17 +13,29 @@ const privateKey = createPrivateKey({
 });
 
 export default async function handler(req, res) {
-  const { grant_type, code, redirect_uri, client_id } = req.body || {};
+  const { grant_type, code, redirect_uri, client_id, nonce: nonceFromClient } = req.body || {};
 
-  if (grant_type !== "authorization_code" || code !== "mock_auth_code") {
+  if (grant_type !== "authorization_code") {
     return res.status(400).json({ error: "invalid_grant" });
   }
+  if (!code || !nonceFromClient) {
+    return res.status(400).json({ error: "invalid_request", error_description: "Missing code or nonce" });
+  }
 
-  // Look up the nonce associated with the auth code from the login step
-  const nonce = nonceStore[code];
+  let codePayload;
+  try {
+    const decoded = Buffer.from(code, 'base64').toString('utf-8');
+    codePayload = JSON.parse(decoded);
+  } catch (e) {
+    return res.status(400).json({ error: "invalid_grant", error_description: "Malformed code" });
+  }
 
-  if (!nonce) {
-    return res.status(400).json({ error: "invalid_nonce" });
+  if (!codePayload.nonce) {
+    return res.status(400).json({ error: "invalid_nonce", error_description: "Nonce missing in code" });
+  }
+
+  if (codePayload.nonce !== nonceFromClient) {
+    return res.status(400).json({ error: "invalid_nonce", error_description: "Nonce mismatch" });
   }
 
   const now = Math.floor(Date.now() / 1000);
@@ -34,7 +45,7 @@ export default async function handler(req, res) {
       iss: process.env.BASE_URL,
       sub: "1234",
       aud: client_id,
-      nonce,              // use nonce from the store here
+      nonce: nonceFromClient,
       exp: now + 3600,
       iat: now,
       name: "Test User",
@@ -43,9 +54,6 @@ export default async function handler(req, res) {
     privateKey,
     { algorithm: "RS256" }
   );
-
-  // Remove nonce from store after use to prevent replay attacks
-  delete nonceStore[code];
 
   res.json({
     access_token: "mock_access_token",
