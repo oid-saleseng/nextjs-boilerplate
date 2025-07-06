@@ -84,54 +84,58 @@ export default function LoginForm() {
           required
           className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         />
-
+        
         {/* Main Login Button */}
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
-        >
-          Login
-        </button>
+<button
+  type="submit"
+  className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
+>
+  Login
+</button>
 
-        {/* Login with Passkey - tight spacing */}
-        <button
-          type="button"
-          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 mt-1 hover:bg-gray-100 transition-colors"
-          onClick={() => alert("Passkey login not implemented yet")}
-        >
-          Login with Passkey
-        </button>
+{/* Login with Passkey - minimal spacing */}
+<button
+  type="button"
+  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
+  onClick={() => alert('Passkey login not implemented yet')}
+>
+  Login with Passkey
+</button>
 
-        {/* Divider */}
-        <div className="text-center text-sm text-gray-500 mt-6 mb-2">
-          Other Login Options
-        </div>
+{/* Divider text */}
+<div className="text-center text-sm text-gray-500 mt-4 mb-1">
+  Other Login Options
+</div>
 
-        {/* Apple Login */}
-        <button
-          type="button"
-          className="w-full bg-black text-white rounded-md px-4 py-2 mb-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
-        >
-           Continue with Apple
-        </button>
+{/* Social Buttons with tighter spacing */}
+<div className="flex flex-col space-y-2">
+  {/* Apple Button */}
+  <button
+    type="button"
+    className="w-full bg-black text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+  >
+     Continue with Apple
+  </button>
 
-        {/* Google Login */}
-        <button
-          type="button"
-          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
-        >
-          <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-          Continue with Google
-        </button>
+  {/* Google Button */}
+  <button
+    type="button"
+    className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+  >
+    <img src="/google-icon.svg" alt="Google" className="w-5 h-5 mr-2" />
+    Continue with Google
+  </button>
 
-        {/* GitHub Button */}
-        <button
-        type="button"
-        className="w-full bg-gray-800 text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
-        >
-       <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
-       Continue with GitHub
-       </button>
+  {/* GitHub Button */}
+  <button
+    type="button"
+    className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+  >
+    <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
+    Continue with GitHub
+  </button>
+</div>
+
 
         {/* Register link */}
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
