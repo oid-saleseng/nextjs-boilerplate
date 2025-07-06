@@ -86,56 +86,57 @@ export default function LoginForm() {
         />
 
         {/* Main Login Button */}
-<button
-  type="submit"
-  className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
->
-  Login
-</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
+        >
+          Login
+        </button>
 
-{/* Login with Passkey - minimal spacing */}
-<button
-  type="button"
-  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 mt-1 hover:bg-gray-100 transition-colors"
-  onClick={() => alert('Passkey login not implemented yet')}
->
-  Login with Passkey
-</button>
+        {/* Login with Passkey - tight spacing */}
+        <button
+          type="button"
+          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 mt-1 hover:bg-gray-100 transition-colors"
+          onClick={() => alert("Passkey login not implemented yet")}
+        >
+          Login with Passkey
+        </button>
 
-{/* Divider text */}
-<div className="text-center text-sm text-gray-500 mt-6 mb-2">
-  Other Login Options
-</div>
-
-{/* Apple Button */}
-<button
-  type="button"
-  className="w-full bg-black text-white rounded-md px-4 py-2 mb-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
->
-   Continue with Apple
-</button>
-
-{/* Google Button */}
-<button
-  type="button"
-  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
->
-  <img src="/google-icon.svg" alt="Google" className="w-5 h-5 mr-2" />
-  Continue with Google
-</button>
-
-
+        {/* Divider */}
+        <div className="text-center text-sm text-gray-500 mt-6 mb-2">
+          Other Login Options
         </div>
+
+        {/* Apple Login */}
+        <button
+          type="button"
+          className="w-full bg-black text-white rounded-md px-4 py-2 mb-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+        >
+           Continue with Apple
+        </button>
+
+        {/* Google Login */}
+        <button
+          type="button"
+          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+        >
+          <img src="/google-icon.svg" alt="Google" className="w-5 h-5 mr-2" />
+          Continue with Google
+        </button>
 
         {/* Register link */}
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Don’t have an account?{" "}
-          <Link href="/register" className="text-blue-600 hover:underline dark:text-blue-400">
+          <Link
+            href="/register"
+            className="text-blue-600 hover:underline dark:text-blue-400"
+          >
             Register here
           </Link>
         </div>
       </form>
 
+      {/* Footer */}
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
         Powered by <span className="font-semibold">OneLogin API Authentication</span>
       </footer>
