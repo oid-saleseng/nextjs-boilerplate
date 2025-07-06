@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -57,7 +58,12 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full max-w-sm bg-white dark:bg-gray-800 p-8 rounded shadow"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">
+        {/* Cool logo */}
+        <div className="flex justify-center mb-4">
+          <Image src="/logo.svg" alt="Logo" width={48} height={48} />
+        </div>
+
+        <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-gray-100 mb-4">
           Login
         </h2>
 
@@ -81,11 +87,31 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="mt-4 bg-blue-600 text-white rounded py-2 font-semibold hover:bg-blue-700 transition"
+          className="mt-2 bg-blue-600 text-white rounded py-2 font-semibold hover:bg-blue-700 transition"
         >
           Log In
         </button>
 
+        {/* Social login buttons */}
+        <div className="flex flex-col gap-2 mt-4">
+          <button
+            type="button"
+            className="flex items-center justify-center gap-2 border border-gray-300 rounded py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+          >
+            <Image src="/apple.svg" alt="Apple" width={20} height={20} />
+            Continue with Apple
+          </button>
+
+          <button
+            type="button"
+            className="flex items-center justify-center gap-2 border border-gray-300 rounded py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+          >
+            <Image src="/google.svg" alt="Google" width={20} height={20} />
+            Continue with Google
+          </button>
+        </div>
+
+        {/* Register link */}
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Don’t have an account?{" "}
           <Link href="/register" className="text-blue-600 hover:underline dark:text-blue-400">
@@ -94,8 +120,8 @@ export default function LoginForm() {
         </div>
       </form>
 
-      <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-        Powered by the <span className="font-semibold">OneLogin Authentication API</span>
+      <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
+        Powered by <span className="font-semibold">OneLogin API Authentication</span>
       </footer>
     </div>
   );
