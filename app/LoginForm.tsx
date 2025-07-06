@@ -35,42 +35,37 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-     // Inside your login form's handleSubmit after calling /api/login
-const response = await fetch("/api/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ username: email,
-          password: password }),
-});
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password
+        }),
+      });
 
-const result = await response.json();
-if (!response.ok || result.status?.error) {
-  alert("Login failed");
-  return;
-}
+      const result = await res.json();
 
-const user = result.data?.[0]?.user;
-if (!user || !user.email) {
-  alert("Invalid login response");
-  return;
-}
+      if (result.status?.code !== 200 || !result.data?.[0]?.session_token) {
+        alert("Invalid username or password");
+        return;
+      }
 
-// Encode user data into the code
-const codePayload = {
-  nonce: params.nonce,
-  email: user.email,
-  sub: String(user.id),
-  name: `${user.firstname} ${user.lastname}`,
-};
+      const sessionToken = result.data[0].session_token;
+      const codePayload = {
+        nonce: params.nonce,
+        session_token: sessionToken,
+      };
 
-const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
+      const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
 
-const redirectUrl = new URL(params.redirect_uri);
-redirectUrl.searchParams.set("code", code);
-redirectUrl.searchParams.set("state", params.state);
+      const redirectUrl = new URL(params.redirect_uri);
+      redirectUrl.searchParams.set("code", code);
+      redirectUrl.searchParams.set("state", params.state);
 
-window.location.href = redirectUrl.toString();
-
+      window.location.href = redirectUrl.toString();
     } catch (error) {
       console.error("Login error:", error);
       alert("An unexpected error occurred. Please try again.");
