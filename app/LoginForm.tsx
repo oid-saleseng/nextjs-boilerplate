@@ -124,6 +124,15 @@ export default function LoginForm() {
           Continue with Google
         </button>
 
+        {/* GitHub Button */}
+        <button
+        type="button"
+        className="w-full bg-gray-800 text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+        >
+       <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
+       Continue with GitHub
+       </button>
+
         {/* Register link */}
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Don’t have an account?{" "}
