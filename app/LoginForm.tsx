@@ -95,7 +95,7 @@ export default function LoginForm() {
       </form>
 
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-        Powered by <span className="font-semibold">OneLogin API Authentication</span>
+        Powered by the <span className="font-semibold">OneLogin Authentication API</span>
       </footer>
     </div>
   );
