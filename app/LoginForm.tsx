@@ -42,7 +42,7 @@ export default function LoginForm() {
         },
         body: JSON.stringify({
           username: email,
-          password: password
+          password: password,
         }),
       });
 
@@ -53,10 +53,14 @@ export default function LoginForm() {
         return;
       }
 
-      const sessionToken = result.data[0].session_token;
+      const sessionData = result.data[0];
+      const sessionToken = sessionData.session_token;
+      const userEmail = sessionData.user?.email || "";
+
       const codePayload = {
         nonce: params.nonce,
         session_token: sessionToken,
+        email: userEmail,
       };
 
       const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
@@ -160,7 +164,8 @@ export default function LoginForm() {
       </form>
 
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
-        Powered by <span className="font-semibold">OneLogin API Authentication</span>
+        Powered by{" "}
+        <span className="font-semibold">OneLogin API Authentication</span>
       </footer>
     </div>
   );
