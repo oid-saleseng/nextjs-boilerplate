@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { createPrivateKey } from "crypto";
+import { nonceStore } from "./login.js"; // adjust the path to your login handler file
 
 const base64Key = process.env.PRIVATE_KEY_BASE64;
 if (!base64Key) throw new Error('Missing PRIVATE_KEY_BASE64 env var');
@@ -19,6 +20,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "invalid_grant" });
   }
 
+  // Look up the nonce associated with the auth code from the login step
+  const nonce = nonceStore[code];
+
+  if (!nonce) {
+    return res.status(400).json({ error: "invalid_nonce" });
+  }
+
   const now = Math.floor(Date.now() / 1000);
 
   const id_token = jwt.sign(
@@ -26,7 +34,7 @@ export default async function handler(req, res) {
       iss: process.env.BASE_URL,
       sub: "1234",
       aud: client_id,
-      nonce: req.body.nonce,
+      nonce,              // use nonce from the store here
       exp: now + 3600,
       iat: now,
       name: "Test User",
@@ -35,6 +43,9 @@ export default async function handler(req, res) {
     privateKey,
     { algorithm: "RS256" }
   );
+
+  // Remove nonce from store after use to prevent replay attacks
+  delete nonceStore[code];
 
   res.json({
     access_token: "mock_access_token",
