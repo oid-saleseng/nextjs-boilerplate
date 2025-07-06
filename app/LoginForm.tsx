@@ -31,25 +31,45 @@ export default function LoginForm() {
     });
   }, [searchParams]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const TEST_EMAIL = "user@example.com";
-    const TEST_PASSWORD = "password123";
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password
+        }),
+      });
 
-    if (email !== TEST_EMAIL || password !== TEST_PASSWORD) {
-      alert("Invalid username or password");
-      return;
+      const result = await res.json();
+
+      if (result.status?.code !== 200 || !result.data?.[0]?.session_token) {
+        alert("Invalid username or password");
+        return;
+      }
+
+      const sessionToken = result.data[0].session_token;
+      const codePayload = {
+        nonce: params.nonce,
+        session_token: sessionToken,
+      };
+
+      const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
+
+      const redirectUrl = new URL(params.redirect_uri);
+      redirectUrl.searchParams.set("code", code);
+      redirectUrl.searchParams.set("state", params.state);
+
+      window.location.href = redirectUrl.toString();
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An unexpected error occurred. Please try again.");
     }
-
-    const codePayload = { nonce: params.nonce };
-    const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
-
-    const redirectUrl = new URL(params.redirect_uri);
-    redirectUrl.searchParams.set("code", code);
-    redirectUrl.searchParams.set("state", params.state);
-
-    window.location.href = redirectUrl.toString();
   };
 
   return (
@@ -58,7 +78,6 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full max-w-sm bg-white dark:bg-gray-800 p-8 rounded shadow"
       >
-        {/* Cool logo */}
         <div className="flex justify-center mb-4">
           <Image src="/logo.svg" alt="Logo" width={48} height={48} />
         </div>
@@ -84,60 +103,51 @@ export default function LoginForm() {
           required
           className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         />
-        
-        {/* Main Login Button */}
-<button
-  type="submit"
-  className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
->
-  Login
-</button>
 
-{/* Login with Passkey - minimal spacing */}
-<button
-  type="button"
-  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
-  onClick={() => alert('Passkey login not implemented yet')}
->
-  Login with Passkey
-</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
+        >
+          Login
+        </button>
 
-{/* Divider text */}
-<div className="text-center text-sm text-gray-500 mt-4 mb-1">
-  Other Login Options
-</div>
+        <button
+          type="button"
+          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
+          onClick={() => alert("Passkey login not implemented yet")}
+        >
+          Login with Passkey
+        </button>
 
-{/* Social Buttons with tighter spacing */}
-<div className="flex flex-col space-y-2">
-  {/* Apple Button */}
-  <button
-    type="button"
-    className="w-full bg-black text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
-  >
-     Continue with Apple
-  </button>
+        <div className="text-center text-sm text-gray-500 mt-4 mb-1">
+          Other Login Options
+        </div>
 
-  {/* Google Button */}
-  <button
-    type="button"
-    className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
-  >
-    <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-    Continue with Google
-  </button>
+        <div className="flex flex-col space-y-2">
+          <button
+            type="button"
+            className="w-full bg-black text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+          >
+             Continue with Apple
+          </button>
 
-  {/* GitHub Button */}
-  <button
-    type="button"
-    className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
-  >
-    <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
-    Continue with GitHub
-  </button>
-</div>
+          <button
+            type="button"
+            className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+          >
+            <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
+            Continue with Google
+          </button>
 
+          <button
+            type="button"
+            className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+          >
+            <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
+            Continue with GitHub
+          </button>
+        </div>
 
-        {/* Register link */}
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Don’t have an account?{" "}
           <Link
@@ -149,7 +159,6 @@ export default function LoginForm() {
         </div>
       </form>
 
-      {/* Footer */}
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
         Powered by <span className="font-semibold">OneLogin API Authentication</span>
       </footer>
