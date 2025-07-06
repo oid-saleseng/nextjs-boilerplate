@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -51,12 +52,14 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col justify-center items-center p-8 bg-gray-50 dark:bg-gray-900">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full max-w-sm bg-white dark:bg-gray-800 p-8 rounded shadow"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">Login</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">
+          Login
+        </h2>
 
         <input
           type="email"
@@ -82,7 +85,18 @@ export default function LoginForm() {
         >
           Log In
         </button>
+
+        <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
+          Don’t have an account?{" "}
+          <Link href="/register" className="text-blue-600 hover:underline dark:text-blue-400">
+            Register here
+          </Link>
+        </div>
       </form>
+
+      <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+        Powered by <span className="font-semibold">OneLogin API Authentication</span>
+      </footer>
     </div>
   );
 }
