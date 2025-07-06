@@ -69,7 +69,7 @@ export default function LoginForm() {
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email/Phone Number"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
