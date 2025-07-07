@@ -80,11 +80,29 @@ export default function LoginForm() {
 
       const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
 
-      const redirectUrl = new URL(params.redirect_uri);
-      redirectUrl.searchParams.set("code", code);
-      redirectUrl.searchParams.set("state", params.state);
+// Store code in KV via backend
+await fetch("/api/store-code", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    code,
+    data: {
+      nonce: params.nonce,
+      session_token: sessionToken,
+      email: userEmail,
+    },
+  }),
+});
 
-      window.location.href = redirectUrl.toString();
+// Then redirect
+const redirectUrl = new URL(params.redirect_uri);
+redirectUrl.searchParams.set("code", code);
+redirectUrl.searchParams.set("state", params.state);
+
+window.location.href = redirectUrl.toString();
+
     } catch (error) {
       console.error("Login error:", error);
       alert("An unexpected error occurred. Please try again.");
