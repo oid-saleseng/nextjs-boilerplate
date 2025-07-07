@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { createPrivateKey } from "crypto";
 import { kv } from "../../lib/kv.js"; // Make sure this path is correct
+import { randomUUID } from "crypto";
 
 const base64Key = process.env.PRIVATE_KEY_BASE64;
 if (!base64Key) throw new Error("Missing PRIVATE_KEY_BASE64 env var");
@@ -82,12 +83,30 @@ export default async function handler(req, res) {
     { algorithm: "RS256" }
   );
 
-  // Step 4: Cleanup the one-time code
+  // Step 4: Generate a unique access token and store user session data keyed by it
+  const access_token = randomUUID();
+
+  try {
+    await kv.set(
+      access_token,
+      JSON.stringify({
+        email,
+        client_id: storedClientId,
+        session_token,
+      }),
+      { ex: 3600 } // expire in 1 hour to match token expiration
+    );
+  } catch (e) {
+    console.error("Failed to store access token in KV:", e);
+    return res.status(500).json({ error: "server_error", error_description: "Failed to store access token" });
+  }
+
+  // Step 5: Cleanup the one-time code
   await kv.del(code);
 
-  // Step 5: Respond
+  // Step 6: Respond with tokens
   return res.json({
-    access_token: "mock_access_token",
+    access_token,
     token_type: "Bearer",
     expires_in: 3600,
     id_token,
