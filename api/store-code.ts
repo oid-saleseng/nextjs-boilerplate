@@ -1,10 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { kv } from '../lib/kv';
+const { kv } = require('../lib/kv');
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
@@ -23,4 +19,4 @@ export default async function handler(
     console.error(err);
     return res.status(500).json({ error: 'Failed to store code' });
   }
-}
+};
