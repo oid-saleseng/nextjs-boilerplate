@@ -16,7 +16,8 @@ export default async function handler(
       return res.status(400).json({ error: 'Missing code or session_token' });
     }
 
-    await kv.set(code, session_token);
+    // Set key with 60 seconds TTL
+    await kv.set(code, session_token, { ex: 60 });
 
     return res.status(200).json({ message: 'Code stored successfully' });
   } catch (err) {
