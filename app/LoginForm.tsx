@@ -87,8 +87,11 @@ await fetch("/api/store-code", {
   body: JSON.stringify({
     code,
     session_token: sessionToken,
+    email: userEmail,
+    client_id: params.client_id,
   }),
 });
+;
 
 // Then redirect
 const redirectUrl = new URL(params.redirect_uri);
