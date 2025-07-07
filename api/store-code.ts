@@ -1,15 +1,23 @@
-// app/api/store-code/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { kv } from '@/lib/kv'; // update path to your kv.ts file
 
-export async function POST(req: NextRequest) {
-  const { code, data } = await req.json();
+import { kv } from '../lib/kv'; // Adjust path to your kv export
 
-  if (!code || !data) {
-    return NextResponse.json({ error: 'Missing code or data' }, { status: 400 });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).end('Method Not Allowed');
   }
 
-  await kv.set(`auth-code:${code}`, data, { ex: 300 }); // expires in 5 minutes
+  try {
+    const { code, session_token } = req.body;
+    if (!code || !session_token) {
+      return res.status(400).json({ error: 'Missing code or session_token' });
+    }
 
-  return NextResponse.json({ success: true });
+    await kv.set(code, session_token);
+
+    return res.status(200).json({ message: 'Code stored successfully' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Failed to store code' });
+  }
 }
