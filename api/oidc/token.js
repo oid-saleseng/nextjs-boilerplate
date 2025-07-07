@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { createPrivateKey } from "crypto";
-import { kv } from "../lib/kv.js"; // Adjust path as needed
+import { kv } from "../../lib/kv.js"; // Adjust path as needed
 
 const base64Key = process.env.PRIVATE_KEY_BASE64;
 if (!base64Key) throw new Error("Missing PRIVATE_KEY_BASE64 env var");
