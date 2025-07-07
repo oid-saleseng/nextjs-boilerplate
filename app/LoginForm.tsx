@@ -83,16 +83,10 @@ export default function LoginForm() {
 // Store code in KV via backend
 await fetch("/api/store-code", {
   method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     code,
-    data: {
-      nonce: params.nonce,
-      session_token: sessionToken,
-      email: userEmail,
-    },
+    session_token: sessionToken,
   }),
 });
 
