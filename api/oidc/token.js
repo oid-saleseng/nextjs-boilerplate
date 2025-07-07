@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { createPrivateKey } from "crypto";
-import { kv } from "../../lib/kv.js"; // Adjust path as needed
+import { kv } from "../../lib/kv.js"; // Make sure this path is correct
 
 const base64Key = process.env.PRIVATE_KEY_BASE64;
 if (!base64Key) throw new Error("Missing PRIVATE_KEY_BASE64 env var");
@@ -24,26 +24,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "invalid_request", error_description: "Missing code" });
   }
 
-  // Step 1: Look up the code in Redis
-  const stored = await kv.get(code);
-  if (!stored) {
-    return res.status(400).json({ error: "invalid_grant", error_description: "Invalid or expired code" });
-  }
-
-  let parsed;
-  try {
-    parsed = JSON.parse(stored); // expected: { session_token, email, client_id }
-  } catch (e) {
-    return res.status(500).json({ error: "server_error", error_description: "Corrupt session data" });
-  }
-
-  const { email, client_id: storedClientId, session_token } = parsed;
-
-  if (storedClientId !== client_id) {
-    return res.status(400).json({ error: "invalid_client", error_description: "Client ID mismatch" });
-  }
-
-  // Step 2: Decode nonce from the original base64 payload (same logic you had)
+  // Step 1: Decode code and extract the real lookup key (nonce)
   let codePayload;
   try {
     const decoded = Buffer.from(code, "base64").toString("utf-8");
@@ -57,13 +38,40 @@ export default async function handler(req, res) {
   }
 
   const nonce = codePayload.nonce;
+
+  // Step 2: Use the *same base64 code string* as the Redis key
+  let stored;
+  try {
+    stored = await kv.get(code); // not nonce!
+    if (!stored) {
+      return res.status(400).json({ error: "invalid_grant", error_description: "Invalid or expired code" });
+    }
+  } catch (e) {
+    console.error("KV lookup failed:", e);
+    return res.status(500).json({ error: "server_error", error_description: "KV failure" });
+  }
+
+  let parsed;
+  try {
+    parsed = typeof stored === "string" ? JSON.parse(stored) : stored;
+  } catch (e) {
+    console.error("Error parsing stored session data:", e);
+    return res.status(500).json({ error: "server_error", error_description: "Corrupt session data" });
+  }
+
+  const { email, client_id: storedClientId, session_token } = parsed;
+
+  if (storedClientId !== client_id) {
+    return res.status(400).json({ error: "invalid_client", error_description: "Client ID mismatch" });
+  }
+
   const now = Math.floor(Date.now() / 1000);
 
-  // Step 3: Generate the ID token
+  // Step 3: Generate ID token
   const id_token = jwt.sign(
     {
       iss: process.env.BASE_URL,
-      sub: email, // use email as subject for simplicity
+      sub: email, // subject is the email
       aud: client_id,
       nonce,
       exp: now + 3600,
@@ -74,10 +82,10 @@ export default async function handler(req, res) {
     { algorithm: "RS256" }
   );
 
-  // Optional: Delete the code from Redis to prevent reuse
+  // Step 4: Cleanup the one-time code
   await kv.del(code);
 
-  // Step 4: Return token response
+  // Step 5: Respond
   return res.json({
     access_token: "mock_access_token",
     token_type: "Bearer",
