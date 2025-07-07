@@ -3,6 +3,6 @@ export default async function handler(req, res) {
   res.json({
     sub: "1234",
     name: "Test User",
-    email: "user@example.com",
+    email: "user2@example.com",
   });
 }
