@@ -1,10 +1,6 @@
-const { kv } = require('../lib/kv');
-import type { NextApiRequest, NextApiResponse } from 'next'; // Type import
+import { kv } from '../lib/kv'; // your Upstash client
 
-module.exports = async function handler(
-  req: NextApiRequest, 
-  res: NextApiResponse
-) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
@@ -23,4 +19,4 @@ module.exports = async function handler(
     console.error(err);
     return res.status(500).json({ error: 'Failed to store code' });
   }
-};
+}
