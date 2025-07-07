@@ -31,6 +31,21 @@ export default function LoginForm() {
     });
   }, [searchParams]);
 
+  // 👇 Add keydown listener for Enter key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        const form = document.getElementById("login-form") as HTMLFormElement;
+        if (form) {
+          form.requestSubmit(); // triggers native submit
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -79,6 +94,7 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-8 bg-gray-50 dark:bg-gray-900">
       <form
+        id="login-form"
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full max-w-sm bg-white dark:bg-gray-800 p-8 rounded shadow"
       >
