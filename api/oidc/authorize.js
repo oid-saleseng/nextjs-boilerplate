@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   // Your redirect whitelist check here...
   const clientRedirectWhitelist = {
-    client123: ["https://ciam-se.onelogin.com/access/idp", "https://example.com/alt"],
+    client123: ["https://ciam-se-saas.onelogin.com/access/idp"],
     myclient: ["https://myapp.com/auth/callback"],
     testclient: ["http://localhost:3000/callback"],
   };
