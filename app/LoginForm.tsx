@@ -196,7 +196,7 @@ window.location.href = redirectUrl.toString();
 
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
         Powered by{" "}
-        <span className="font-semibold">OneLogin API Authentication</span>
+        <span className="font-semibold">OneLogin Authentication APIs </span>
       </footer>
     </div>
   );
