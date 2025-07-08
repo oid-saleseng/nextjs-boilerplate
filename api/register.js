@@ -14,8 +14,7 @@ export default async function handler(request, response) {
 
     // Prepare custom attributes
     const customAttributes = {
-      custom_ui_user: "TRUE",
-      ...(isFirstUser && { org_root_user: "TRUE" })
+      custom_ui_user: "TRUE" }
     };
 
     // Create the user
