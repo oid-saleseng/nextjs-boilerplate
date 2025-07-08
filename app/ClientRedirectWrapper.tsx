@@ -12,7 +12,7 @@ export default function ClientRedirectWrapper() {
     const clientId = searchParams.get("client_id");
 
     if (!clientId) {
-      window.location.replace("https://ciam-se-saas.onelogin.com");
+      window.location.replace("https://ciam-se-saas.onelogin.com/access/initiate?iss=https://customlogin-ciam-demo.com&target_link_uri=https://ciam-se-saas.onelogin.com/start/4015637");
     } else {
       setShowLogin(true);
     }
