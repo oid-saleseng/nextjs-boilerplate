@@ -122,4 +122,58 @@ export default function RegisterForm() {
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none foc
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
+          type="tel"
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
+        >
+          Register
+        </button>
+
+        <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
+          Already have an account?{" "}
+          <Link
+            href="/"
+            className="text-blue-600 hover:underline dark:text-blue-400"
+          >
+            Login here
+          </Link>
+        </div>
+      </form>
+
+      <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
+        Powered by{" "}
+        <span className="font-semibold">OneLogin API Authentication</span>
+      </footer>
+    </div>
+  );
+}
