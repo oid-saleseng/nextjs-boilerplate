@@ -9,12 +9,13 @@ export default async function handler(request, response) {
     if (!accessToken) return response.status(500).json({ error: "Failed to obtain access token" });
 
     // Check if this is the first user from this company
-   // const existingUsers = await getUsersByCompany(company, accessToken);
-   // const isFirstUser = existingUsers.length === 0;
+    const existingUsers = await getUsersByCompany(company, accessToken);
+    const isFirstUser = existingUsers.length === 0;
 
     // Prepare custom attributes
     const customAttributes = {
-      custom_ui_user: "TRUE" }
+      custom_ui_user: "TRUE",
+      ...(isFirstUser && { org_root_user: "TRUE" })
     };
 
     // Create the user
@@ -24,32 +25,32 @@ export default async function handler(request, response) {
     const userId = userData.id;
 
     // Register MFA: Email
-   // const mfaFactorData = await registerEmailMFA(userId, accessToken);
-   // if (!mfaFactorData) return response.status(500).json({ error: "Failed to register Email MFA factor" });
+    const mfaFactorData = await registerEmailMFA(userId, accessToken);
+    if (!mfaFactorData) return response.status(500).json({ error: "Failed to register Email MFA factor" });
 
-  //  await updateUserCustomAttribute(userId, {
-  //    mfa_device_id_email: mfaFactorData.device_id,
-  //  }, accessToken);
+    await updateUserCustomAttribute(userId, {
+      mfa_device_id_email: mfaFactorData.device_id,
+    }, accessToken);
 
     // Register MFA: Email Magic Link
- //   const mfaFactorDataMagic = await registerEmail2MFA(userId, accessToken);
- //   if (!mfaFactorDataMagic) return response.status(500).json({ error: "Failed to register Email Magic Link MFA factor" });
+    const mfaFactorDataMagic = await registerEmail2MFA(userId, accessToken);
+    if (!mfaFactorDataMagic) return response.status(500).json({ error: "Failed to register Email Magic Link MFA factor" });
 
- //   await updateUserCustomAttribute(userId, {
-  //    mfa_device_id_email_mlink: mfaFactorDataMagic.device_id,
-   // }, accessToken);
+    await updateUserCustomAttribute(userId, {
+      mfa_device_id_email_mlink: mfaFactorDataMagic.device_id,
+    }, accessToken);
 
     // Register MFA: Phone
-   // const mfaFactorDataPhone = await registerPhoneMFA(userId, accessToken);
-   // if (!mfaFactorDataPhone) return response.status(500).json({ error: "Failed to register Phone MFA factor" });
+    const mfaFactorDataPhone = await registerPhoneMFA(userId, accessToken);
+    if (!mfaFactorDataPhone) return response.status(500).json({ error: "Failed to register Phone MFA factor" });
 
     // Respond
-  //  return response.status(200).json({
-  //    user: userData,
-  //    mfa_email: mfaFactorData,
-  //    mfa_email_magic: mfaFactorDataMagic,
-  //    mfa_phone: mfaFactorDataPhone,
- //   });
+    return response.status(200).json({
+      user: userData,
+      mfa_email: mfaFactorData,
+      mfa_email_magic: mfaFactorDataMagic,
+      mfa_phone: mfaFactorDataPhone,
+    });
 
   } catch (error) {
     console.error("Error in handler:", error);
