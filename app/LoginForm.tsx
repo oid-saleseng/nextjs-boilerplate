@@ -1,167 +1,70 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [params, setParams] = useState({
-    client_id: "",
-    redirect_uri: "",
-    state: "",
-    scope: "",
-    response_type: "",
-    nonce: "",
-  });
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    setParams({
-      client_id: searchParams.get("client_id") || "",
-      redirect_uri: searchParams.get("redirect_uri") || "",
-      state: searchParams.get("state") || "",
-      scope: searchParams.get("scope") || "",
-      response_type: searchParams.get("response_type") || "",
-      nonce: searchParams.get("nonce") || "",
-    });
-  }, [searchParams]);
-
-  // 👇 Add keydown listener for Enter key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        const form = document.getElementById("login-form") as HTMLFormElement;
-        if (form) {
-          form.requestSubmit(); // triggers native submit
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: email,
-          password: password,
-        }),
-      });
-
-      const result = await res.json();
-
-      if (result.status?.code !== 200 || !result.data?.[0]?.session_token) {
-        alert("Invalid username or password");
-        return;
-      }
-
-      const sessionData = result.data[0];
-      const sessionToken = sessionData.session_token;
-      const userEmail = sessionData.user?.email || "";
-
-      const codePayload = {
-        nonce: params.nonce,
-        session_token: sessionToken,
-        email: userEmail,
-      };
-
-      const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
-
-// Store code in KV via backend
-await fetch("/api/store-code", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    code,
-    session_token: sessionToken,
-    email: userEmail,
-    client_id: params.client_id,
-  }),
-});
-;
-
-// Then redirect
-const redirectUrl = new URL(params.redirect_uri);
-redirectUrl.searchParams.set("code", code);
-redirectUrl.searchParams.set("state", params.state);
-
-window.location.href = redirectUrl.toString();
-
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("An unexpected error occurred. Please try again.");
+    if (!email) {
+      alert("Please enter an email address");
+      return;
     }
+
+    alert(`Login with email: ${email}`);
+    // Add your login logic here
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-8 bg-gray-50 dark:bg-gray-900">
-      <form
-        id="login-form"
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-full max-w-sm bg-white dark:bg-gray-800 p-8 rounded shadow"
-      >
-        <div className="flex justify-center mb-4">
-          <Image src="/logo.svg" alt="Logo" width={48} height={48} />
-        </div>
-
-        <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-gray-100 mb-4">
-          Login
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="max-w-md w-full space-y-6 bg-white p-8 rounded-xl shadow-md">
+        <h2 className="text-center text-2xl font-bold text-gray-900">
+          Sign in to your account
         </h2>
 
-        <input
-          type="email"
-          placeholder="Email/Phone Number"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
+          <div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
+            >
+              Continue with Email
+            </button>
+          </div>
+        </form>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
-        >
-          Login
-        </button>
-
-        <button
-          type="button"
-          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
-          onClick={() => alert("Passkey login not implemented yet")}
-        >
-          Login with Passkey
-        </button>
-
-        <div className="text-center text-sm text-gray-500 mt-4 mb-1">
-          Other Login Options
+        <div className="relative py-3">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-white px-2 text-gray-500">or continue with</span>
+          </div>
         </div>
 
-        <div className="flex flex-col space-y-2">
+        <div className="space-y-3">
           <button
             type="button"
             className="w-full bg-black text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+            onClick={() => alert("Apple login not implemented yet")}
           >
              Continue with Apple
           </button>
@@ -169,6 +72,7 @@ window.location.href = redirectUrl.toString();
           <button
             type="button"
             className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+            onClick={() => alert("Google login not implemented yet")}
           >
             <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
             Continue with Google
@@ -177,27 +81,12 @@ window.location.href = redirectUrl.toString();
           <button
             type="button"
             className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+            onClick={() => alert("Passkey login not implemented yet")}
           >
-            <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
-            Continue with GitHub
+            🔑 Continue with Passkey
           </button>
         </div>
-
-        <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
-          Don’t have an account?{" "}
-          <Link
-            href="./register"
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            Register here
-          </Link>
-        </div>
-      </form>
-
-      <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
-        Powered by{" "}
-        <span className="font-semibold">OneLogin Authentication APIs </span>
-      </footer>
+      </div>
     </div>
   );
 }
