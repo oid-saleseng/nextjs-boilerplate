@@ -31,13 +31,12 @@ export default function LoginForm() {
     });
   }, [searchParams]);
 
-  // 👇 Add keydown listener for Enter key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         const form = document.getElementById("login-form") as HTMLFormElement;
         if (form) {
-          form.requestSubmit(); // triggers native submit
+          form.requestSubmit();
         }
       }
     };
@@ -80,25 +79,22 @@ export default function LoginForm() {
 
       const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
 
-// Store code in KV via backend
-await fetch("/api/store-code", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    code,
-    session_token: sessionToken,
-    email: userEmail,
-    client_id: params.client_id,
-  }),
-});
-;
+      await fetch("/api/store-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          session_token: sessionToken,
+          email: userEmail,
+          client_id: params.client_id,
+        }),
+      });
 
-// Then redirect
-const redirectUrl = new URL(params.redirect_uri);
-redirectUrl.searchParams.set("code", code);
-redirectUrl.searchParams.set("state", params.state);
+      const redirectUrl = new URL(params.redirect_uri);
+      redirectUrl.searchParams.set("code", code);
+      redirectUrl.searchParams.set("state", params.state);
 
-window.location.href = redirectUrl.toString();
+      window.location.href = redirectUrl.toString();
 
     } catch (error) {
       console.error("Login error:", error);
@@ -122,8 +118,8 @@ window.location.href = redirectUrl.toString();
         </h2>
 
         <input
-          type="email"
-          placeholder="Email/Phone Number"
+          type="text"
+          placeholder="Email or Phone Number"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -199,7 +195,7 @@ window.location.href = redirectUrl.toString();
 
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
         Powered by{" "}
-        <span className="font-semibold">OneLogin Authentication APIs </span>
+        <span className="font-semibold">OneLogin Authentication APIs</span>
       </footer>
     </div>
   );
