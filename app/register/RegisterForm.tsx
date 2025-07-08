@@ -8,11 +8,23 @@ import Link from "next/link";
 export default function RegisterForm() {
   const searchParams = useSearchParams();
   const referrer = searchParams.get("ref") || "";
-  const [email, setEmail] = useState("");
+
+  const [formData, setFormData] = useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Registering:", email);
+    console.log("Registering:", formData);
     // Add actual registration logic here
   };
 
@@ -37,10 +49,51 @@ export default function RegisterForm() {
         )}
 
         <input
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
           placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        />
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
           required
           className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         />
@@ -55,10 +108,10 @@ export default function RegisterForm() {
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Already have an account?{" "}
           <Link
-            href="./login"
+            href="/"
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
-            Login here
+            Return to Home
           </Link>
         </div>
       </form>
