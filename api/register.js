@@ -120,7 +120,7 @@ async function createUser(userDetails, accessToken) {
       },
       body: JSON.stringify({
         email: userDetails.email,
-        username: userDetails.email,
+        username: userDetails.phone,
         firstname: userDetails.firstname,
         lastname: userDetails.lastname,
         password: userDetails.password,
