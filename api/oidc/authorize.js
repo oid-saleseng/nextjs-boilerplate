@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       nonce,  // add nonce here
     });
 
-    return res.redirect(`https://nextjs-boilerplate-kbjp.vercel.app/?${params.toString()}`);
+    return res.redirect(`https://customlogin-ciam-demo.com/?${params.toString()}`);
   }
 
   // Normally you'd generate and send auth code here after successful auth
