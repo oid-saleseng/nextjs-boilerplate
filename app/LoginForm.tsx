@@ -186,7 +186,7 @@ window.location.href = redirectUrl.toString();
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Don’t have an account?{" "}
           <Link
-            href="/register"
+            href="app/register"
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
             Register here
