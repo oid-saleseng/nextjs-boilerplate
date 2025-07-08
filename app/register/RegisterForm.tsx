@@ -142,7 +142,7 @@ export default function RegisterForm() {
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Already have an account?{" "}
           <Link
-            href="https://ciam-se-saas.onelogin.com"
+            href="https://ciam-se-saas.onelogin.com/access/initiate?iss=https://customlogin-ciam-demo.com&target_link_uri=https://ciam-se-saas.onelogin.com/start/4015637"
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
             Return to Home
