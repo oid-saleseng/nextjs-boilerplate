@@ -22,10 +22,44 @@ export default function RegisterForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Registering:", formData);
-    // Add actual registration logic here
+
+    const payload = {
+      email: formData.email,
+      password: formData.password,
+      firstname: formData.firstName,
+      lastname: formData.lastName,
+      phone: formData.phone,
+    };
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Registration failed:", errorData);
+        alert("Registration failed: " + errorData.message);
+        return;
+      }
+
+      const result = await res.json();
+      console.log("Registration successful:", result);
+      alert("Registration successful!");
+
+      // Optional: redirect user after successful registration
+      // window.location.href = "/";
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An unexpected error occurred.");
+    }
   };
 
   return (
@@ -108,7 +142,7 @@ export default function RegisterForm() {
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
           Already have an account?{" "}
           <Link
-            href="https://ciam-se-saas.onelogin.com"
+            href="/"
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
             Return to Home
@@ -123,3 +157,4 @@ export default function RegisterForm() {
     </div>
   );
 }
+
