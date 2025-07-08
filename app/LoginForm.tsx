@@ -162,6 +162,7 @@ window.location.href = redirectUrl.toString();
           <button
             type="button"
             className="w-full bg-black text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
+            onClick={() => alert("AppleID login not implemented yet")}
           >
              Continue with Apple
           </button>
@@ -169,6 +170,7 @@ window.location.href = redirectUrl.toString();
           <button
             type="button"
             className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+            onClick={() => alert("Google login not implemented yet")}
           >
             <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
             Continue with Google
@@ -177,6 +179,7 @@ window.location.href = redirectUrl.toString();
           <button
             type="button"
             className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors flex items-center justify-center"
+            onClick={() => alert("Github login not implemented yet")}
           >
             <img src="/github-icon.svg" alt="GitHub" className="w-5 h-5 mr-2" />
             Continue with GitHub
