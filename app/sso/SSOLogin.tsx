@@ -20,7 +20,7 @@ export default function SSOLogin() {
 
   const lowerEmail = email.toLowerCase();
   if (lowerEmail.endsWith("@orga.com")) {
-    const redirectUrl = `https://ciam-se-saas.onelogin.com/access/initiate?iss=https://se-b2b-org-a.onelogin.com/oidc/2&target_link_uri=https://ciam-se-saas.onelogin.com/start/40156372`;
+    const redirectUrl = "https://ciam-se-saas.onelogin.com/access/initiate?iss=https://se-b2b-org-a.onelogin.com/oidc/2&target_link_uri=https://ciam-se-saas.onelogin.com/start/40156372";
     window.location.href = redirectUrl;
   } else {
     alert("Not a valid Enterprise customer");
