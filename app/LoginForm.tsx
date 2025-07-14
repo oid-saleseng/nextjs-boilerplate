@@ -197,6 +197,15 @@ export default function LoginForm() {
             Register here
           </Link>
         </div>
+        <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
+          Enterprise Customer?{" "}
+          <Link
+            href="./sso"
+            className="text-blue-600 hover:underline dark:text-blue-400"
+          >
+            B2B SSO
+          </Link>
+        </div>
       </form>
 
       <footer className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
