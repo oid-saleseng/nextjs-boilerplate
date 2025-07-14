@@ -61,7 +61,7 @@ export default function SSOLogin() {
           type="submit"
           className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
         >
-          Submit
+          Continue
         </button>
 
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
