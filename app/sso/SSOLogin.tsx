@@ -15,16 +15,17 @@ export default function SSOLogin() {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+ const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (email.toLowerCase().endsWith("@orga.com")) {
-      window.location.href =
-        "https://ciam-se-saas.onelogin.com/access/initiate?iss=https://se-b2b-org-a.onelogin.com/oidc/2&target_link_uri=https://ciam-se-saas.onelogin.com/start/40156372";
-    } else {
-      alert("Not a valid Enterprise customer");
-    }
-  };
+  const lowerEmail = email.toLowerCase();
+  if (lowerEmail.endsWith("@orga.com")) {
+    const redirectUrl = `https://ciam-se-saas.onelogin.com/access/initiate?iss=https://se-b2b-org-a.onelogin.com/oidc/2&target_link_uri=https://ciam-se-saas.onelogin.com/start/40156372&login_hint=${encodeURIComponent(lowerEmail)}`;
+    window.location.href = redirectUrl;
+  } else {
+    alert("Not a valid Enterprise customer");
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-8 bg-gray-50 dark:bg-gray-900">
