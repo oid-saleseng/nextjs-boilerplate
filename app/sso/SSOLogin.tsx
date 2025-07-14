@@ -9,29 +9,16 @@ export default function SSOLogin() {
   const searchParams = useSearchParams();
   const referrer = searchParams.get("ref") || "";
 
-  const [formData, setFormData] = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setEmail(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = {
-      email: formData.email,
-      password: formData.password,
-      firstname: formData.firstName,
-      lastname: formData.lastName,
-      phone: formData.phone,
-    };
+    const payload = { email };
 
     try {
       const res = await fetch("/api/register", {
@@ -44,17 +31,14 @@ export default function SSOLogin() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        console.error("Registration failed:", errorData);
-        alert("Registration failed: " + errorData.message);
+        console.error("Submission failed:", errorData);
+        alert("Submission failed: " + errorData.message);
         return;
       }
 
       const result = await res.json();
-      console.log("Registration successful:", result);
-      alert("Registration successful!");
-
-      // Optional: redirect user after successful registration
-      // window.location.href = "/";
+      console.log("Submission successful:", result);
+      alert("Submission successful!");
 
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -73,7 +57,7 @@ export default function SSOLogin() {
         </div>
 
         <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-gray-100 mb-2">
-          Register
+          Submit Email
         </h2>
 
         {referrer && (
@@ -83,50 +67,10 @@ export default function SSOLogin() {
         )}
 
         <input
-          type="text"
-          name="firstName"
-          placeholder="First Name"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
-
-        <input
-          type="text"
-          name="lastName"
-          placeholder="Last Name"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
-
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone Number"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
-
-        <input
           type="email"
           name="email"
           placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
+          value={email}
           onChange={handleChange}
           required
           className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -136,7 +80,7 @@ export default function SSOLogin() {
           type="submit"
           className="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
         >
-          Register
+          Submit
         </button>
 
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
