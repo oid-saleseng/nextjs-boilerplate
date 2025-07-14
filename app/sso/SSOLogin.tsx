@@ -57,7 +57,7 @@ export default function SSOLogin() {
         </div>
 
         <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-gray-100 mb-2">
-          Submit Email
+          B2B SSO Login
         </h2>
 
         {referrer && (
@@ -84,7 +84,7 @@ export default function SSOLogin() {
         </button>
 
         <div className="text-sm text-center mt-4 text-gray-600 dark:text-gray-300">
-          Already have an account?{" "}
+          Go to B2C Login?{" "}
           <Link
             href="https://ciam-se-saas.onelogin.com/access/initiate?iss=https://customlogin-ciam-demo.com&target_link_uri=https://ciam-se-saas.onelogin.com/start/4015637"
             className="text-blue-600 hover:underline dark:text-blue-400"
