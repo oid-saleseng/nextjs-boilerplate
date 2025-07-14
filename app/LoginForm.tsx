@@ -158,7 +158,10 @@ export default function LoginForm() {
           <button
             type="button"
             className="w-full bg-black text-white rounded-md px-4 py-2 hover:bg-gray-900 transition-colors flex items-center justify-center"
-            onClick={() => alert("AppleID login not implemented yet")}
+            onClick={() =>
+    window.location.href =
+      "https://ciam-se-saas.onelogin.com/access/initiate?iss=https://appleid.apple.com&target_link_uri=https://ciam-se-saas.onelogin.com/start/4015637"
+  }
           >
              Continue with Apple
           </button>
