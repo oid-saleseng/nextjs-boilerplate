@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -15,34 +15,14 @@ export default function SSOLogin() {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = { email };
-
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Submission failed:", errorData);
-        alert("Submission failed: " + errorData.message);
-        return;
-      }
-
-      const result = await res.json();
-      console.log("Submission successful:", result);
-      alert("Submission successful!");
-
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An unexpected error occurred.");
+    if (email.toLowerCase().endsWith("@orga.com")) {
+      window.location.href =
+        "https://ciam-se-saas.onelogin.com/access/initiate?iss=https://se-b2b-org-a.onelogin.com/oidc/2&target_link_uri=https://ciam-se-saas.onelogin.com/start/40156372";
+    } else {
+      alert("Not a valid Enterprise customer");
     }
   };
 
