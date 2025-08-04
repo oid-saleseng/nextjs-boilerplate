@@ -2,24 +2,19 @@ import fetch from 'node-fetch';
 
 export default async function handler(request, response) {
   try {
-    const { email, firstname, lastname, phone, company } = request.body;
+    const { email } = request.body;
 
     // Fetch the access token
     const accessToken = await getAccessToken();
     if (!accessToken) return response.status(500).json({ error: "Failed to obtain access token" });
 
-    // Check if this is the first user from this company
-    const existingUsers = await getUsersByCompany(company, accessToken);
-    const isFirstUser = existingUsers.length === 0;
-
     // Prepare custom attributes
     const customAttributes = {
-      passkey_user: "TRUE",
-      ...(isFirstUser && { org_root_user: "TRUE" })
+      passkey_user: "TRUE"
     };
 
     // Create the user
-    const userData = await createUser({ email, firstname, lastname, phone, company, customAttributes }, accessToken);
+    const userData = await createUser({ email, customAttributes }, accessToken);
     if (!userData) return response.status(500).json({ error: "Failed to create user" });
 
     const userId = userData.id;
@@ -120,11 +115,6 @@ async function createUser(userDetails, accessToken) {
       },
       body: JSON.stringify({
         email: userDetails.email,
-        username: userDetails.phone,
-        firstname: userDetails.firstname,
-        lastname: userDetails.lastname,
-        phone: userDetails.phone,
-        company: userDetails.company,
         custom_attributes: userDetails.customAttributes
       })
     });
