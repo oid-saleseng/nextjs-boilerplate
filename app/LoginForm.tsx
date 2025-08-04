@@ -152,8 +152,20 @@ export default function LoginForm() {
     }
 
     try {
-      // Simulate session token generation
-      const sessionToken = crypto.randomUUID(); // Can also use a secure token generator if needed
+      // Step 1: Check passkey eligibility via API
+      const res = await fetch(`/api/passkey_user?email=${encodeURIComponent(email.trim())}`);
+      const data = await res.json();
+
+      const user = data?.user?.[0];
+      const isPasskeyEnabled = user?.custom_attributes?.passkey_user === "TRUE";
+
+      if (!isPasskeyEnabled) {
+        alert("User is not enabled for Passkeys login");
+        return;
+      }
+
+      // Step 2: Generate a session token and build code payload
+      const sessionToken = crypto.randomUUID();
 
       const codePayload = {
         nonce: params.nonce,
@@ -163,7 +175,7 @@ export default function LoginForm() {
 
       const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
 
-      // Store code on the backend
+      // Step 3: Store code on backend
       await fetch("/api/store-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -175,12 +187,13 @@ export default function LoginForm() {
         }),
       });
 
-      // Redirect to original redirect_uri
+      // Step 4: Redirect to original app with code + state
       const redirectUrl = new URL(params.redirect_uri);
       redirectUrl.searchParams.set("code", code);
       redirectUrl.searchParams.set("state", params.state);
 
       window.location.href = redirectUrl.toString();
+
     } catch (err) {
       console.error("Passkey login error:", err);
       alert("An unexpected error occurred during passkey login.");
@@ -189,6 +202,7 @@ export default function LoginForm() {
 >
   Login with Passkey
 </button>
+
 
 
         <div className="text-center text-sm text-gray-500 mt-4 mb-1">
