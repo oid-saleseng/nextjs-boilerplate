@@ -205,31 +205,3 @@ async function registerEmail2MFA(userId, accessToken) {
     return null;
   }
 }
-
-async function registerPhoneMFA(userId, accessToken) {
-  try {
-    const response = await fetch(`${process.env.SERVER}/api/2/mfa/users/${userId}/registrations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        "factor_id": `${process.env.PHONE_FACTOR_ID}`,
-        "display_name": "Phone",
-        "verified": true
-      })
-    });
-
-    if (!response.ok) {
-      console.error("Failed to register phone MFA factor:", response.statusText);
-      return null;
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error in registerPhoneMFA:", error);
-    return null;
-  }
-}
