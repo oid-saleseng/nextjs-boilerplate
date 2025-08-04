@@ -203,6 +203,40 @@ export default function LoginForm() {
   Login with Passkey
 </button>
 
+        <button
+  type="button"
+  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
+  onClick={async () => {
+    if (!email.trim()) {
+      alert("Please enter your Email Address or Phone Number to continue");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/register_passkey_user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const result = await res.json();
+
+      if (result?.status?.code !== 200) {
+        alert(result?.status?.message || "Registration failed.");
+        return;
+      }
+
+      alert("User successfully registered for Passkey login.");
+      // You could redirect or do something else here
+    } catch (err) {
+      console.error("Passkey registration error:", err);
+      alert("An unexpected error occurred during registration.");
+    }
+  }}
+>
+  Register with Passkey
+</button>
+
 
 
         <div className="text-center text-sm text-gray-500 mt-4 mb-1">
