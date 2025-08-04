@@ -145,17 +145,51 @@ export default function LoginForm() {
         <button
   type="button"
   className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
-  onClick={() => {
+  onClick={async () => {
     if (!email.trim()) {
-      alert("Please enter your email address or Phone Number to continue");
-    } else {
-      alert("Trying passkey login");
-      // You can initiate passkey login here
+      alert("Please enter your email address to continue");
+      return;
+    }
+
+    try {
+      // Simulate session token generation
+      const sessionToken = crypto.randomUUID(); // Can also use a secure token generator if needed
+
+      const codePayload = {
+        nonce: params.nonce,
+        session_token: sessionToken,
+        email,
+      };
+
+      const code = Buffer.from(JSON.stringify(codePayload)).toString("base64");
+
+      // Store code on the backend
+      await fetch("/api/store-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          session_token: sessionToken,
+          email,
+          client_id: params.client_id,
+        }),
+      });
+
+      // Redirect to original redirect_uri
+      const redirectUrl = new URL(params.redirect_uri);
+      redirectUrl.searchParams.set("code", code);
+      redirectUrl.searchParams.set("state", params.state);
+
+      window.location.href = redirectUrl.toString();
+    } catch (err) {
+      console.error("Passkey login error:", err);
+      alert("An unexpected error occurred during passkey login.");
     }
   }}
 >
   Login with Passkey
 </button>
+
 
         <div className="text-center text-sm text-gray-500 mt-4 mb-1">
           Other Login Options
