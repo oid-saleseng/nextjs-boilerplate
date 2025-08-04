@@ -35,16 +35,11 @@ export default async function handler(request, response) {
       mfa_device_id_email_mlink: mfaFactorDataMagic.device_id,
     }, accessToken);
 
-    // Register MFA: Phone
-    const mfaFactorDataPhone = await registerPhoneMFA(userId, accessToken);
-    if (!mfaFactorDataPhone) return response.status(500).json({ error: "Failed to register Phone MFA factor" });
-
     // Respond
     return response.status(200).json({
       user: userData,
       mfa_email: mfaFactorData,
-      mfa_email_magic: mfaFactorDataMagic,
-      mfa_phone: mfaFactorDataPhone,
+      mfa_email_magic: mfaFactorDataMagic
     });
 
   } catch (error) {
