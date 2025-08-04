@@ -143,12 +143,19 @@ export default function LoginForm() {
         </button>
 
         <button
-          type="button"
-          className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
-          onClick={() => alert("Passkey login not implemented yet")}
-        >
-          Login with Passkey
-        </button>
+  type="button"
+  className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
+  onClick={() => {
+    if (!email.trim()) {
+      alert("Please enter your email address to continue");
+    } else {
+      alert("Trying passkey login");
+      // You can initiate passkey login here
+    }
+  }}
+>
+  Login with Passkey
+</button>
 
         <div className="text-center text-sm text-gray-500 mt-4 mb-1">
           Other Login Options
