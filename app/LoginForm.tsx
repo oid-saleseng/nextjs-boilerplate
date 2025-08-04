@@ -147,7 +147,7 @@ export default function LoginForm() {
   className="w-full bg-white text-black border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 transition-colors"
   onClick={() => {
     if (!email.trim()) {
-      alert("Please enter your email address to continue");
+      alert("Please enter your email address or Phone Number to continue");
     } else {
       alert("Trying passkey login");
       // You can initiate passkey login here
