@@ -1,11 +1,18 @@
 export default async function handler(req, res) {
-  const { response_type, client_id, redirect_uri, scope, state, nonce } = req.query;
+  const { response_type, client_id, redirect_uri, scope, state, nonce, acr_value } = req.query;
 
+  // Validate required fields
   if (!client_id || !redirect_uri) {
     return res.status(400).send("Missing required parameters");
   }
 
-  // Your redirect whitelist check here...
+  // Validate acr_value
+  const requiredAcr = "onelogin%3Anist%3Alevel%3A1%3Are-auth";
+  if (!acr_value || acr_value !== requiredAcr) {
+    return res.status(400).send("Invalid or missing acr_value");
+  }
+
+  // Redirect whitelist
   const clientRedirectWhitelist = {
     client123: ["https://ciam-se-saas.onelogin.com/access/idp"]
   };
@@ -14,26 +21,28 @@ export default async function handler(req, res) {
   if (!allowedRedirects) {
     return res.status(400).send("Invalid client_id");
   }
+
   if (!allowedRedirects.includes(redirect_uri)) {
     return res.status(400).send("Invalid redirect_uri for client_id");
   }
 
-  // Simulate session (in real world use cookies)
+  // Simulated session state
   const isAuthenticated = false;
 
   if (!isAuthenticated) {
-    // Pass nonce along to login endpoint so it’s not lost
+    // Add acr_value to params passed to login page
     const params = new URLSearchParams({
       client_id,
       redirect_uri,
       state,
       scope,
       response_type,
-      nonce,  // add nonce here
+      nonce,
+      acr_value, // pass through
     });
 
     return res.redirect(`https://customlogin-ciam-demo.com/?${params.toString()}`);
   }
 
-  // Normally you'd generate and send auth code here after successful auth
+  // After auth, generate and return auth code normally
 }
