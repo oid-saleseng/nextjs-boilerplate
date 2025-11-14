@@ -1,15 +1,29 @@
 export default async function handler(req, res) {
-  const { response_type, client_id, redirect_uri, scope, state, nonce, acr_value } = req.query;
+  const { 
+    response_type, 
+    client_id, 
+    redirect_uri, 
+    scope, 
+    state, 
+    nonce, 
+    acr_values 
+  } = req.query;
 
-  // Validate required fields
+  // Required fields
   if (!client_id || !redirect_uri) {
     return res.status(400).send("Missing required parameters");
   }
 
-  // Validate acr_value
-  const requiredAcr = "onelogin%3Anist%3Alevel%3A1%3Are-auth";
-  if (!acr_value || acr_value !== requiredAcr) {
-    return res.status(400).send("Invalid or missing acr_value");
+  // Expected ACR values
+  const requiredAcrEncoded = "onelogin%3Anist%3Alevel%3A1%3Are-auth";
+  const requiredAcrDecoded = "onelogin:nist:level:1:re-auth";
+
+  // Validate acr_values
+  if (
+    !acr_values || 
+    (acr_values !== requiredAcrEncoded && acr_values !== requiredAcrDecoded)
+  ) {
+    return res.status(400).send("Invalid or missing acr_values");
   }
 
   // Redirect whitelist
@@ -26,11 +40,10 @@ export default async function handler(req, res) {
     return res.status(400).send("Invalid redirect_uri for client_id");
   }
 
-  // Simulated session state
+  // Simulated session
   const isAuthenticated = false;
 
   if (!isAuthenticated) {
-    // Add acr_value to params passed to login page
     const params = new URLSearchParams({
       client_id,
       redirect_uri,
@@ -38,11 +51,11 @@ export default async function handler(req, res) {
       scope,
       response_type,
       nonce,
-      acr_value, // pass through
+      acr_values,  // pass as-is
     });
 
     return res.redirect(`https://customlogin-ciam-demo.com/?${params.toString()}`);
   }
 
-  // After auth, generate and return auth code normally
+  // Normally return auth code after real authentication
 }
