@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     // Append the required ACR value (overwrites if exists)
     incomingParams.set(
       "acr_values",
-      "urn:be:fedict:iam:fas:citizen:Level400"
+      "urn:be:fedict:iam:fas:citizen:Level400bla"
     );
 
     // Build final URL
