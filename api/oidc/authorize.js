@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   // Expected ACR values
   const requiredAcrEncoded = "onelogin%3Anist%3Alevel%3A1%3Are-auth";
-  const requiredAcrDecoded = "onelogin:nist:level:1:re-auth";
+  const requiredAcrDecoded = "urn:be:fedict:iam:fas:citizen:Level400";
 
   // Validate acr_values
   if (
