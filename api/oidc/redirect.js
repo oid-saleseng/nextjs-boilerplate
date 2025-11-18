@@ -5,12 +5,12 @@ export default async function handler(req, res) {
 
     // Append the required ACR value (overwrites if exists)
     incomingParams.set(
-      "acr_values",
-      "urn:be:fedict:iam:fas:citizen:Level400"
+      "redirect_uri",
+      "https://mycitizenebox.belgium.be/myebox/login/oauth2/code/fas"
     );
 
     // Build final URL
-    const redirectUrl = `https://customlogin-ciam-demo.com/api/oidc/authorize?${incomingParams.toString()}`;
+    const redirectUrl = `https://idp.iamfas.belgium.be/fas/oauth2/authorize?${incomingParams.toString()}`;
 
     // Redirect the user
     res.redirect(302, redirectUrl);
