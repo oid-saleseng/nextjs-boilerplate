@@ -3,10 +3,16 @@ export default async function handler(req, res) {
     // Take all query params
     const incomingParams = new URLSearchParams(req.query);
 
-    // Append the required ACR value (overwrites if exists)
+    // Append or overwrite required params
     incomingParams.set(
       "redirect_uri",
       "https://mycitizenebox.belgium.be/myebox/login/oauth2/code/fas"
+    );
+
+    // Set the required ACR value
+    incomingParams.set(
+      "acr_values",
+      "urn:be:fedict:iam:fas:citizen:Level400"
     );
 
     // Build final URL
