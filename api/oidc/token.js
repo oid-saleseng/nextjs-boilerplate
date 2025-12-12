@@ -68,16 +68,19 @@ export default async function handler(req, res) {
 
   const now = Math.floor(Date.now() / 1000);
 
-  // Step 3: Generate ID token
+// Step 3: Generate ID token
+  const subject = randomUUID(); // generate a random string as subject
+
   const id_token = jwt.sign(
     {
       iss: process.env.BASE_URL,
-      sub: email, // subject is the email
+      sub: subject,            // sub is now a random string
       aud: client_id,
       nonce,
       exp: now + 3600,
       iat: now,
-      email,
+      email,                   // email claim holds user's email
+      email_verified: true,    // set this if you know it's verified
     },
     privateKey,
     { algorithm: "RS256" }
