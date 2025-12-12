@@ -68,12 +68,15 @@ export default async function handler(req, res) {
 
   const now = Math.floor(Date.now() / 1000);
 
-  // Step 3: Generate ID token
+  // Step 3: Generate ID token with surname
   let subject;
+  let surname;
   if (email === "paul@paul2.com") {
     subject = "1234567";
+    surname = "smith";
   } else {
     subject = randomUUID(); // generate a random string as subject
+    surname = "unknown";
   }
 
   const id_token = jwt.sign(
@@ -86,6 +89,7 @@ export default async function handler(req, res) {
       iat: now,
       email,                   // email claim holds user's email
       email_verified: true,    // set this if you know it's verified
+      surname,                 // add surname claim
     },
     privateKey,
     { algorithm: "RS256" }
