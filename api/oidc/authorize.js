@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       acr_values,  // pass as-is
     });
 
-    return res.redirect(`https://customlogin-ciam-demo.com/?${params.toString()}`);
+    return res.redirect(`https://nextjs-boilerplate-git-saas-marc-maguires-projects.vercel.app/?${params.toString()}`);
   }
 
   // Normally return auth code after real authentication
