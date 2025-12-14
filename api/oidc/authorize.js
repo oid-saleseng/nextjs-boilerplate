@@ -14,18 +14,6 @@ export default async function handler(req, res) {
     return res.status(400).send("Missing required parameters");
   }
 
-  // Expected ACR values
-  const requiredAcrEncoded = "onelogin%3Anist%3Alevel%3A1%3Are-auth";
-  const requiredAcrDecoded = "urn:be:fedict:iam:fas:citizen:Level400";
-
-  // Validate acr_values
-  if (
-    !acr_values || 
-    (acr_values !== requiredAcrEncoded && acr_values !== requiredAcrDecoded)
-  ) {
-    return res.status(400).send("Invalid or missing acr_values");
-  }
-
   // Redirect whitelist
   const clientRedirectWhitelist = {
     client123: ["https://mmacguire-test.onelogin-shadow01.com/access/idp"]
