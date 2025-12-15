@@ -94,7 +94,8 @@ export default async function handler(req, res) {
       email,                   // email claim holds user's email
       email_verified: true,    // set this if you know it's verified
       surname,
-      fedid
+      fedid,
+      egovNRN
     },
     privateKey,
     { algorithm: "RS256" }
