@@ -71,9 +71,11 @@ export default async function handler(req, res) {
   // Step 3: Generate ID token with surname
   let subject;
   let surname;
+  let fedid;
   if (email === "paul@paul2.com") {
     subject = "1234567";
     surname = "smith-doyle";
+    fedid = "987654321";
   } else {
     subject = randomUUID(); // generate a random string as subject
     surname = "unknown";
@@ -90,6 +92,7 @@ export default async function handler(req, res) {
       email,                   // email claim holds user's email
       email_verified: true,    // set this if you know it's verified
       surname,
+      fedid
     },
     privateKey,
     { algorithm: "RS256" }
