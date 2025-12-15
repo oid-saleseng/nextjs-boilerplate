@@ -73,7 +73,7 @@ export default async function handler(req, res) {
   let surname;
   if (email === "paul@paul2.com") {
     subject = "1234567";
-    surname = "smith";
+    surname = "smith-doyle";
   } else {
     subject = randomUUID(); // generate a random string as subject
     surname = "unknown";
