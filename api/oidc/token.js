@@ -77,7 +77,7 @@ export default async function handler(req, res) {
     subject = "1234567";
     surname = "smith-doyle";
     fedid = "987654321";
-    egovNRN = "4554445N";
+    egovNRN_v2 = "4554445N";
   } else {
     subject = randomUUID(); // generate a random string as subject
     surname = "unknown";
