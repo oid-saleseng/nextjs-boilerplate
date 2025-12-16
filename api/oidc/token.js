@@ -72,12 +72,12 @@ export default async function handler(req, res) {
   let subject;
   let surname;
   let fedid;
-  let egovNRN_v2;
+  let egovNRN;
   if (email === "paul@paul2.com") {
     subject = "1234567";
     surname = "smith-doyle";
     fedid = "987654321";
-    egovNRN_v2 = "4554445N";
+    egovNRN = "4554445N";
   } else {
     subject = randomUUID(); // generate a random string as subject
     surname = "unknown";
@@ -95,7 +95,7 @@ export default async function handler(req, res) {
       email_verified: true,    // set this if you know it's verified
       surname,
       fedid,
-      egovNRN_v2
+      egovNRN
     },
     privateKey,
     { algorithm: "RS256" }
