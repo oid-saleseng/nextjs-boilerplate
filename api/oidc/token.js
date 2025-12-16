@@ -72,7 +72,7 @@ export default async function handler(req, res) {
   let subject;
   let surname;
   let fedid;
-  let egovNRN;
+  let egovNRN_v2;
   if (email === "paul@paul2.com") {
     subject = "1234567";
     surname = "smith-doyle";
@@ -95,7 +95,7 @@ export default async function handler(req, res) {
       email_verified: true,    // set this if you know it's verified
       surname,
       fedid,
-      egovNRN
+      egovNRN_v2
     },
     privateKey,
     { algorithm: "RS256" }
