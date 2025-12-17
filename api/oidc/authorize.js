@@ -19,16 +19,16 @@ export default async function handler(req, res) {
   const requiredAcrDecoded = "urn:be:fedict:iam:fas:citizen:Level400";
 
   // Validate acr_values
-  if (
-    !acr_values || 
-    (acr_values !== requiredAcrEncoded && acr_values !== requiredAcrDecoded)
-  ) {
-    return res.status(400).send("Invalid or missing acr_values");
-  }
+  //if (
+  //  !acr_values || 
+  //  (acr_values !== requiredAcrEncoded && acr_values !== requiredAcrDecoded)
+ // ) {
+ //   return res.status(400).send("Invalid or missing acr_values");
+ // }
 
   // Redirect whitelist
   const clientRedirectWhitelist = {
-    client123: ["https://mmacguire-test.onelogin-shadow01.com/access/idp"]
+    client123: ["https://ciam-se-saas.onelogin.com/access/idp"]
   };
 
   const allowedRedirects = clientRedirectWhitelist[client_id];
