@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
   // Redirect whitelist
   const clientRedirectWhitelist = {
-    client123: ["https://ciam-se-eu.onelogin.com/access/idp"]
+    client123: ["https://sso.kongsupply.com/access/idp"]
   };
 
   const allowedRedirects = clientRedirectWhitelist[client_id];
